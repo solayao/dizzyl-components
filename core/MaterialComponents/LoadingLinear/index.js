@@ -32,6 +32,7 @@ class LoadingLinear extends React.PureComponent {
         if (this.timer) clearInterval(this.timer);
         if (this.finishTimer) clearInterval(this.finishTimer);
         this.timer = this.finishTimer =null;
+        this.unmount = true;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -51,17 +52,23 @@ class LoadingLinear extends React.PureComponent {
 
     start = () => { // 开始Loading
         this.timer = setInterval(this.progress, 500);
+
         setTimeout(()=> {
             this.finsh();
         }, this.props.loadSecond * 1000);
     }
 
     finsh = () => { // 完成Loading
+        const { exit } = this.state;
+
+        if (exit || this.unmount) return;
+
         this.setState({
             completed: 100,
             buffer: 100,
         }, () => {
             if (this.timer) clearInterval(this.timer);
+
             this.finishTimer = setTimeout(() => {
                 this.setState({
                     exit: true
@@ -71,7 +78,10 @@ class LoadingLinear extends React.PureComponent {
     };
 
     progress = () => {  // 渐增
-        const { completed } = this.state;
+        const { completed, exit } = this.state;
+
+        if (exit || this.unmount) return;
+
         if (completed > 90) {
             // this.setState({ completed: 0, buffer: 10 });
         } else {
