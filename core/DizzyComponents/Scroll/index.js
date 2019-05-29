@@ -11,6 +11,7 @@ import './index.css';
  * @prop {Function}  onRef 获取滚动主模块this
  * @prop {Number}    height 模块滚动区域高度
  * @prop {Boolean}   updateScrollToTop 获取新数据是否滚动到顶部
+ * @prop {Object}    scrollProps Better-Scroll的设置项
  * @class ScrollModel
  * @extends {React.Component}
  */
@@ -48,6 +49,7 @@ class ScrollModel extends React.Component {
                     threshold: -20 // 在上拉到超过底部 20px 时，触发 pullingUp 事件
                 },
                 click: true,
+                ...this.props.scrollProps,
             });
             this.pullUp();
             this.pullDown();
@@ -124,10 +126,12 @@ ScrollModel.propTypes = {
     onRef: Proptypes.func,
     height: Proptypes.number.isRequired,
     updateScrollToTop: Proptypes.bool,
+    scrollProps: Proptypes.object,
 };
 ScrollModel.defaultProps = {
     height: 500,
     updateScrollToTop: false,
+    scrollProps: {},
 };
 
 export default ScrollModel;
