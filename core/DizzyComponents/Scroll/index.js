@@ -23,6 +23,7 @@ class ScrollModel extends React.Component {
     }
 
     componentDidMount() {
+        this.handleSetAutoHeight();
         this.initScroll();
         if (this.props.onRef) {
             this.props.onRef(this);
@@ -32,6 +33,10 @@ class ScrollModel extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.updateScrollToTop) {
             this.scrollTo(0, 0);
+        }
+        if (nextProps.height !== this.props.height) {
+            this.handleSetAutoHeight();
+            this.scroll.refresh();
         }
     }
 
@@ -110,10 +115,19 @@ class ScrollModel extends React.Component {
         this.scroll.scrollToElement(el, time, offsetX, offsetY);
     }
 
+    handleSetAutoHeight = () => {
+        if (this.props.height === 0) {
+            let parent = this.wrapperRefs.current.parentNode;
+            this.wrapperRefs.current.style = `height: ${parent.clientHeight}px`;
+        } else {
+            this.wrapperRefs.current.style = `height: ${this.props.height}px`;
+        }
+    }
+
     render() {
-        const {children, height} = this.props;
+        const {children} = this.props;
         return (
-            <div className="wrapper" ref={this.wrapperRefs} style={{height: `${height}px`}}>
+            <div className="wrapper" ref={this.wrapperRefs}>
                 {children}
             </div>
         )
@@ -129,7 +143,7 @@ ScrollModel.propTypes = {
     scrollProps: Proptypes.object,
 };
 ScrollModel.defaultProps = {
-    height: 500,
+    height: 0,
     updateScrollToTop: false,
     scrollProps: {},
 };

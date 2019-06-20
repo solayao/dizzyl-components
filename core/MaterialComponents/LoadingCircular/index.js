@@ -37,14 +37,16 @@ const styles = {
     wrapper: {
         flex: 1,
         display: 'inherit',
+        width: '100%',
+        height: '100%',
     },
     loadingWrapper: {
         position: 'relative',
     },
     progress: {
         position: 'absolute',
-        top: '50%',
-        left: '50%',
+        top: '40%',
+        left: '40%',
     }
 };
 
